@@ -6,26 +6,59 @@
 @startuml
 
 
-package domain.model {
+application.calculator.Calculator ..> domain.parser.Expression: parse >
+application.calculator.Calculator ..> domain.expression.Expression: calculate >
 
-    calculator.Calculator ..> parser.Expression
-    calculator.Calculator ..> expression.Expression
+others.ui.CalculatorViewModel "1" o--> "1" application.calculator.Calculator: calculator
+others.ui.KeyPad ..> application.calculator.Key
+
+package others {
+    package ui {
+        class Calculator {
+
+        }
+
+        class KeyPad {
+            + onHit((key: Key) -> Unit)
+        }
+
+
+        class Screen {
+            + expressionText: String
+            + cursorPosition: Int
+            + resultText: Strnig
+            + onTouch((position: Int) -> Unit)
+        }
+
+        Calculator "1" o--> "1" CalculatorViewModel: calculatorViewModel
+        Calculator "1" *--> "1" Screen
+        Calculator "1" *--> "1" KeyPad
+
+        class CalculatorViewModel implements application.calculator.Screen, ViewModel {
+            + expressionText: StateFlow<String>
+            + cursorPosition: StateFlow<Int>
+            + resultText: StateFlow<String>
+            + hit(key: Key)
+            + moveCursorTo(index: Int)
+        }
+    }
+}
+
+package application {
 
     package calculator {
         interface Screen {
             + onExpressionChanged(expression: String)
+            + onCursorPositionChanged(index: Int)
             + onResultChanged(result: Result<BigDecimal, Error>)
         }
 
-        interface KeyPad {
-            + hit(key: Key)
-        }
-
-        class Calculator implements KeyPad {
+        class Calculator {
             - text: String
             - cursorPosition: Int
+            + hit(key: Key)
+            + moveCursorTo(index: Int)
         }
-
 
         enum Key {
             - text: String
@@ -53,9 +86,13 @@ package domain.model {
             RIGHT("→")
         }
 
-        Calculator "1" *-- "1" Screen: screen
-        KeyPad ..> Key
+        Calculator "1" *--> "1" Screen: screen
+        Calculator ..> Key
     }
+
+}
+
+package domain {
 
     package parser {
         interface Parser<T> {
@@ -77,17 +114,17 @@ package domain.model {
         Expression ..> PrioritizedChoice
         Expression ..> Symbol
         Expression ..> Number
-        Expression ..> domain.model.expression.Addition
-        Expression ..> domain.model.expression.Subtraction
-        Expression ..> domain.model.expression.Multiplication
-        Expression ..> domain.model.expression.Division
+        Expression ..> domain.expression.Addition
+        Expression ..> domain.expression.Subtraction
+        Expression ..> domain.expression.Multiplication
+        Expression ..> domain.expression.Division
 
         class Symbol implements Parser<Expression> {
         }
 
         class Number implements Parser<Expression> {
         }
-        Number ..> domain.model.expression.Number
+        Number ..> domain.expression.Number
     }
 
     package expression {
@@ -98,19 +135,19 @@ package domain.model {
 
         class Addition implements Expression {
         }
-        Addition "1" o-- "2" Expression: a, b
+        Addition "1" o--> "2" Expression: a, b
 
         class Subtraction implements Expression {
         }
-        Subtraction "1" o-- "2" Expression: a, b
+        Subtraction "1" o--> "2" Expression: a, b
 
         class Multiplication implements Expression {
         }
-        Multiplication "1" o-- "2" Expression: a, b
+        Multiplication "1" o--> "2" Expression: a, b
 
         class Division implements Expression {
         }
-        Division "1" o-- "2" Expression: a, b
+        Division "1" o--> "2" Expression: a, b
 
         class Number implements Expression {
             - value: BigDecimal
