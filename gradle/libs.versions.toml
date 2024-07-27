@@ -9,6 +9,7 @@ compose-compiler = "1.5.14"
 compose-multiplatform = "1.6.11"
 jetpack-compose = "1.6.7"
 compose-material3 = "1.2.1"
+compose-viewmodel-lifecycle = "2.8.0"
 
 androidx-activityCompose = "1.9.0"
 kotlinResult = "2.0.0"
@@ -20,6 +21,8 @@ compose-ui = { module = "androidx.compose.ui:ui", version.ref = "jetpack-compose
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "jetpack-compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "jetpack-compose" }
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+
+compose-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "compose-viewmodel-lifecycle" }
 
 
 

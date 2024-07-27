@@ -1,38 +1,29 @@
-package io.github.kishigaki.calculatorapp.other.ui
+package io.github.kishigaki.calculatorapp.others.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import calculatorapp.shared.generated.resources.Res
-import calculatorapp.shared.generated.resources.compose_multiplatform
-import io.github.kishigaki.calculatorapp.Greeting
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.kishigaki.calculatorapp.others.ui.CalculatorViewModel
 
 @Composable
-fun Calculator() {
+fun Calculator(viewModel: CalculatorViewModel = viewModel { CalculatorViewModel() }) {
+    val expressionText = viewModel.expressionText.collectAsState()
+    val cursorPosition = viewModel.cursorPosition.collectAsState()
+    val resultText = viewModel.resultText.collectAsState()
+
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
-                }
+        Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.inverseSurface)) {
+            Column {
+                Screen(expressionText.value, cursorPosition.value, resultText.value)
+                KeyPad { viewModel.hit(it) }
             }
         }
     }

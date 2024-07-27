@@ -1,0 +1,126 @@
+@startuml
+class io.github.kishigaki.calculatorapp.domain.expression.Division {
++ void calculate()
++ void null()
+}
+
+class io.github.kishigaki.calculatorapp.application.calculator.Calculator {
+- String expression
+- Int cursorPosition
++ void null()
++ void null()
++ void hit(Key)
++ void moveCursorTo(Int)
+}
+
+
+class io.github.kishigaki.calculatorapp.Greeting {
+- Platform platform
++ String greet()
+}
+
+
+interface io.github.kishigaki.calculatorapp.application.calculator.Screen {
++ void onExpressionChanged(String)
++ void onCursorPositionChanged(Int)
++ void onResultChanged(Result<BigDecimal, Error>)
+}
+
+class io.github.kishigaki.calculatorapp.domain.expression.Addition {
++ void calculate()
+}
+
+interface io.github.kishigaki.calculatorapp.domain.expression.Expression {
++ Result<Fraction, Error> calculate()
+}
+
+class io.github.kishigaki.calculatorapp.domain.parser.PrioritizedChoice {
++ Result<Pair<T, String>, Error> parse(String)
+}
+
+class io.github.kishigaki.calculatorapp.domain.parser.Number {
++ Result<Pair<Expression, String>, Error> parse(String)
+}
+
+class io.github.kishigaki.calculatorapp.domain.parser.Expression {
+- Parser<Expression> primary
+- Parser<Expression> secondary
+- Parser<Expression> tertiary
+- Parser<Expression> quaternary
++ void parse(String)
+}
+
+
+class io.github.kishigaki.calculatorapp.domain.parser.Sequence {
++ Result<Pair<T, String>, Error> parse(String)
+}
+
+class io.github.kishigaki.calculatorapp.domain.expression.Subtraction {
++ void calculate()
+}
+
+class io.github.kishigaki.calculatorapp.domain.expression.Number {
++ void calculate()
+}
+
+interface io.github.kishigaki.calculatorapp.domain.parser.Parser {
++ Result<Pair<T, String>, Error> parse(String)
+}
+
+enum io.github.kishigaki.calculatorapp.application.calculator.Key {
+}
+class io.github.kishigaki.calculatorapp.domain.expression.Fraction {
++  roundedValue
++ Int compareTo(Fraction)
++ void toString()
++ void unaryMinus()
++ void plus(Fraction)
++ void null()
++ void minus(Fraction)
++ void times(Fraction)
++ void div(Fraction)
++ Boolean equals(Any?)
++ Int hashCode()
+}
+
+
+class io.github.kishigaki.calculatorapp.others.ui.CalculatorViewModel {
+-  _expressionText
++  expressionText
+-  _cursorPosition
++  cursorPosition
+-  _resultText
++  resultText
+-  calculator
++ void hit(Key)
++ void moveCursorTo(Int)
+}
+
+
+class io.github.kishigaki.calculatorapp.domain.expression.Multiplication {
++ void calculate()
+}
+
+interface io.github.kishigaki.calculatorapp.Platform {
++ String name
+}
+
+class io.github.kishigaki.calculatorapp.domain.parser.Symbol {
++ Result<Pair<Expression, String>, Error> parse(String)
+}
+
+
+
+io.github.kishigaki.calculatorapp.domain.expression.Expression <|.. io.github.kishigaki.calculatorapp.domain.expression.Division
+io.github.kishigaki.calculatorapp.domain.expression.Expression <|.. io.github.kishigaki.calculatorapp.domain.expression.Addition
+io.github.kishigaki.calculatorapp.domain.parser.Parser <|.. io.github.kishigaki.calculatorapp.domain.parser.PrioritizedChoice
+io.github.kishigaki.calculatorapp.domain.parser.Parser <|.. io.github.kishigaki.calculatorapp.domain.parser.Number
+io.github.kishigaki.calculatorapp.domain.parser.Parser <|.. io.github.kishigaki.calculatorapp.domain.parser.Expression
+io.github.kishigaki.calculatorapp.domain.parser.Parser <|.. io.github.kishigaki.calculatorapp.domain.parser.Sequence
+io.github.kishigaki.calculatorapp.domain.expression.Expression <|.. io.github.kishigaki.calculatorapp.domain.expression.Subtraction
+io.github.kishigaki.calculatorapp.domain.expression.Expression <|.. io.github.kishigaki.calculatorapp.domain.expression.Number
+io.github.kishigaki.calculatorapp.domain.expression.Comparable <|.. io.github.kishigaki.calculatorapp.domain.expression.Fraction
+androidx.lifecycle.ViewModel <|-- io.github.kishigaki.calculatorapp.others.ui.CalculatorViewModel
+io.github.kishigaki.calculatorapp.domain.expression.Expression <|.. io.github.kishigaki.calculatorapp.domain.expression.Multiplication
+io.github.kishigaki.calculatorapp.domain.parser.Parser <|.. io.github.kishigaki.calculatorapp.domain.parser.Symbol
+@enduml

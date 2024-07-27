@@ -34,6 +34,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(libs.kotlin.result)
             implementation(libs.bignum)
+            implementation(libs.compose.viewmodel)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

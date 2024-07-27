@@ -5,10 +5,11 @@ import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.binding
 import io.github.kishigaki.calculatorapp.model.parser.Expression
 
-class Calculator(private val screen: Screen) : KeyPad {
+class Calculator(private val screen: Screen) {
 
     private var expression: String = ""
         set(value) {
+            field = value
             screen.onExpressionChanged(value)
             val parseResult = Expression().parse(value)
             if (parseResult.isErr) {
@@ -25,26 +26,27 @@ class Calculator(private val screen: Screen) : KeyPad {
 
     private var cursorPosition: Int = 0
         set(value) {
+            field = value
             screen.onCursorPositionChanged(value)
         }
 
-    override fun hit(key: Key) {
+    fun hit(key: Key) {
         when (key) {
             Key.POINT, Key.ZERO, Key.ONE, Key.TWO, Key.THREE, Key.FOUR, Key.FIVE, Key.SIX, Key.SEVEN, Key.EIGHT, Key.NINE -> {
-                expression = expression.replaceRange(cursorPosition..cursorPosition, key.text)
+                expression = StringBuilder(expression).insert(cursorPosition, key.text).toString()
                 cursorPosition += key.text.length
             }
             Key.PLUS, Key.MINUS, Key.TIMES, Key.DIVIDE -> {
-                expression = expression.replaceRange(cursorPosition..cursorPosition, key.text)
+                expression = StringBuilder(expression).insert(cursorPosition, key.text).toString()
                 cursorPosition += key.text.length
             }
             Key.OPEN_PARENTHESIS, Key.CLOSE_PARENTHESIS -> {
-                expression = expression.replaceRange(cursorPosition..cursorPosition, key.text)
+                expression = StringBuilder(expression).insert(cursorPosition, key.text).toString()
                 cursorPosition += key.text.length
             }
             Key.DELETE -> {
                 if (cursorPosition > 0) {
-                    expression = expression.removeRange(cursorPosition - 1..cursorPosition)
+                    expression = StringBuilder(expression).deleteAt(cursorPosition - 1).toString()
                     cursorPosition -= 1
                 }
             }
@@ -70,6 +72,12 @@ class Calculator(private val screen: Screen) : KeyPad {
                     cursorPosition += 1
                 }
             }
+        }
+    }
+
+    fun moveCursorTo(index: Int) {
+        if ((0..expression.length).contains(cursorPosition) && index != cursorPosition) {
+            cursorPosition = index
         }
     }
 }
