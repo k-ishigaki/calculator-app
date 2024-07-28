@@ -35,33 +35,32 @@ fun Screen(expressionText: String, cursorPosition: Int, resultText: String, onCl
     Column(Modifier.fillMaxWidth().padding(5.dp), horizontalAlignment = Alignment.End) {
         HorizontalDivider()
         Row(Modifier.height(100.dp).horizontalScroll(rememberScrollState()), verticalAlignment = Alignment.CenterVertically) {
-            if (expressionText.isEmpty()) {
+            if (cursorPosition == 0) {
                 TextCaret()
-            } else {
-                expressionText.forEachIndexed { index, c ->
-                    Box(Modifier.fillMaxHeight(), contentAlignment = Alignment.CenterEnd) {
-                        Row(Modifier.matchParentSize()) {
-                            Box(Modifier.fillMaxHeight().weight(1.0F).pointerInput(Unit) {
-                                awaitPointerEventScope {
-                                    while (true) {
-                                        awaitPointerEvent()
-                                        onClick(cursorPosition - 1)
-                                    }
+            }
+            expressionText.forEachIndexed { index, c ->
+                Box(Modifier.fillMaxHeight(), contentAlignment = Alignment.CenterEnd) {
+                    Row(Modifier.matchParentSize()) {
+                        Box(Modifier.fillMaxHeight().weight(1.0F).pointerInput(Unit) {
+                            awaitPointerEventScope {
+                                while (true) {
+                                    awaitPointerEvent()
+                                    onClick(index - 1)
                                 }
-                            })
-                            Box(Modifier.fillMaxHeight().weight(1.0F).pointerInput(Unit) {
-                                awaitPointerEventScope {
-                                    while (true) {
-                                        awaitPointerEvent()
-                                        onClick(cursorPosition)
-                                    }
+                            }
+                        })
+                        Box(Modifier.fillMaxHeight().weight(1.0F).pointerInput(Unit) {
+                            awaitPointerEventScope {
+                                while (true) {
+                                    awaitPointerEvent()
+                                    onClick(index)
                                 }
-                            })
-                        }
-                        Text(c.toString(), fontSize = 50.sp, color = MaterialTheme.colorScheme.onPrimary)
-                        if (index == cursorPosition - 1) {
-                            TextCaret()
-                        }
+                            }
+                        })
+                    }
+                    Text(c.toString(), fontSize = 50.sp, color = MaterialTheme.colorScheme.onPrimary)
+                    if (index == cursorPosition - 1) {
+                        TextCaret()
                     }
                 }
             }
