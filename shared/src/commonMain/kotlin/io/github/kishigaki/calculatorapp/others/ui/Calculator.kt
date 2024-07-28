@@ -22,8 +22,12 @@ fun Calculator(viewModel: CalculatorViewModel = viewModel { CalculatorViewModel(
     MaterialTheme {
         Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.inverseSurface)) {
             Column {
-                Screen(expressionText.value, cursorPosition.value, resultText.value)
-                KeyPad { viewModel.hit(it) }
+                Box(Modifier.weight(1.0F)) {
+                    Screen(expressionText.value, cursorPosition.value, resultText.value) { viewModel.moveCursorTo(it) }
+                }
+                Box(Modifier.weight(1.0F)) {
+                    KeyPad { viewModel.hit(it) }
+                }
             }
         }
     }

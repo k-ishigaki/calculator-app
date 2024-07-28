@@ -54,7 +54,7 @@ class Calculator(private val screen: Screen) {
                 binding {
                     val parseResult = Expression().parse(expression).bind()
                     val calculationResult = parseResult.first.calculate().bind().roundedValue
-                    expression = calculationResult.toString()
+                    expression = calculationResult.toStringExpanded()
                     cursorPosition = expression.length
                 }
             }
