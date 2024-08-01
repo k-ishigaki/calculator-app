@@ -1,4 +1,4 @@
-package io.github.kishigaki.calculatorapp.model.expression
+package io.github.kishigaki.calculatorapp.domain.expression
 
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.DecimalMode

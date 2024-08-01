@@ -1,10 +1,11 @@
-package io.github.kishigaki.calculatorapp.model.expression
+package io.github.kishigaki.calculatorapp.domain.expression
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.binding
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
+import io.github.kishigaki.calculatorapp.model.expression.Expression
 
 class Division(private val a: Expression, private val b: Expression) : Expression {
     override fun calculate() =

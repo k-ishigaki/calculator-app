@@ -1,4 +1,4 @@
-package io.github.kishigaki.calculatorapp.model.parser
+package io.github.kishigaki.calculatorapp.domain.parser
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result

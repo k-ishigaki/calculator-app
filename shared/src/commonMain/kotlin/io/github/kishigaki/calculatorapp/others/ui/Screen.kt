@@ -45,7 +45,7 @@ fun Screen(expressionText: String, cursorPosition: Int, resultText: String, onCl
                             awaitPointerEventScope {
                                 while (true) {
                                     awaitPointerEvent()
-                                    onClick(index - 1)
+                                    onClick(index)
                                 }
                             }
                         })
@@ -53,7 +53,7 @@ fun Screen(expressionText: String, cursorPosition: Int, resultText: String, onCl
                             awaitPointerEventScope {
                                 while (true) {
                                     awaitPointerEvent()
-                                    onClick(index)
+                                    onClick(index + 1)
                                 }
                             }
                         })

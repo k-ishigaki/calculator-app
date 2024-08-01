@@ -3,7 +3,7 @@ package io.github.kishigaki.calculatorapp.application.calculator
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.binding
-import io.github.kishigaki.calculatorapp.model.parser.Expression
+import io.github.kishigaki.calculatorapp.domain.parser.Expression
 
 class Calculator(private val screen: Screen) {
 
@@ -76,8 +76,9 @@ class Calculator(private val screen: Screen) {
     }
 
     fun moveCursorTo(index: Int) {
-        if ((0..expression.length).contains(cursorPosition) && index != cursorPosition) {
-            cursorPosition = index
+        if (!(0..expression.length).contains(index)) {
+            throw IndexOutOfBoundsException("moveCursorTo(index) out of range")
         }
+        cursorPosition = index
     }
 }

@@ -2,12 +2,12 @@ package io.github.kishigaki.calculatorapp
 
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
-import io.github.kishigaki.calculatorapp.model.expression.Addition
-import io.github.kishigaki.calculatorapp.model.expression.Division
-import io.github.kishigaki.calculatorapp.model.expression.Multiplication
-import io.github.kishigaki.calculatorapp.model.expression.Number
-import io.github.kishigaki.calculatorapp.model.expression.Subtraction
-import io.github.kishigaki.calculatorapp.model.parser.Expression
+import io.github.kishigaki.calculatorapp.domain.expression.Addition
+import io.github.kishigaki.calculatorapp.domain.expression.Division
+import io.github.kishigaki.calculatorapp.domain.expression.Multiplication
+import io.github.kishigaki.calculatorapp.domain.expression.Number
+import io.github.kishigaki.calculatorapp.domain.expression.Subtraction
+import io.github.kishigaki.calculatorapp.domain.parser.Expression
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

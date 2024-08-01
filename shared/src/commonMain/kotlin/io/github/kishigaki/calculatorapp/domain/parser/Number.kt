@@ -1,11 +1,11 @@
-package io.github.kishigaki.calculatorapp.model.parser
+package io.github.kishigaki.calculatorapp.domain.parser
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import io.github.kishigaki.calculatorapp.model.expression.Expression
-import io.github.kishigaki.calculatorapp.model.expression.Number
+import io.github.kishigaki.calculatorapp.domain.expression.Number
 
 class Number : Parser<Expression> {
     override fun parse(text: String): Result<Pair<Expression, String>, Error> {
