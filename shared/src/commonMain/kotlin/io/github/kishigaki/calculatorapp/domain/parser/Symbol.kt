@@ -6,7 +6,7 @@ import com.github.michaelbull.result.Result
 import io.github.kishigaki.calculatorapp.domain.expression.Expression
 
 class Symbol(private val string: String) : Parser<Expression> {
-    override fun parse(text: String): Result<Pair<Expression, String>, Error> {
+    override fun parse(text: String): Result<Pair<Expression, String>, Pair<Error, String>> {
         if (text.startsWith(string)) {
             val emptyExpression = object:
                 Expression {
@@ -14,6 +14,6 @@ class Symbol(private val string: String) : Parser<Expression> {
             }
             return Ok(emptyExpression to text.removePrefix(string))
         }
-        return Err(Error("symbol not found string = $string"))
+        return Err(Error("symbol not found string = $string") to text)
     }
 }

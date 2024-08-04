@@ -13,7 +13,7 @@ class Calculator(private val screen: Screen) {
             screen.onExpressionChanged(value)
             val parseResult = Expression().parse(value)
             if (parseResult.isErr) {
-                screen.onResultChanged(Err(parseResult.error))
+                screen.onResultChanged(Err(parseResult.error.first))
                 return
             }
             val calculationResult = parseResult.value.first.calculate()
@@ -37,8 +37,64 @@ class Calculator(private val screen: Screen) {
                 cursorPosition += key.text.length
             }
             Key.PLUS, Key.MINUS, Key.TIMES, Key.DIVIDE -> {
-                expression = StringBuilder(expression).insert(cursorPosition, key.text).toString()
-                cursorPosition += key.text.length
+                val operatorKeyStrings = listOf(Key.PLUS, Key.MINUS, Key.TIMES, Key.DIVIDE).map { it.text }
+                if (operatorKeyStrings.contains(expression.getOrNull(cursorPosition - 1).toString())) {
+                    if (operatorKeyStrings.contains(expression.getOrNull(cursorPosition - 2).toString())) {
+                        // example: 2*-|10
+                        //              ^ <-- cursorPosition
+                        if (key == Key.MINUS) {
+                            // -> 2*-|10
+                        } else {
+                            // -> 2+|10
+                            expression = StringBuilder(expression).apply {
+                                deleteAt(cursorPosition - 1)
+                                deleteAt(cursorPosition - 2)
+                                insert(cursorPosition - 2, key.text)
+                            }.toString()
+                            cursorPosition -= 1
+                        }
+                    } else if (Key.MINUS.text == expression.getOrNull(cursorPosition).toString()) {
+                        // example: 2*|-10
+                        //             ^ <-- cursorPosition
+                        if (key == Key.MINUS) {
+                            // -> 2*-|10
+                            cursorPosition += 1
+                        } else {
+                            // -> 2+|10
+                            expression = StringBuilder(expression).apply {
+                                deleteAt(cursorPosition)
+                                deleteAt(cursorPosition - 1)
+                                insert(cursorPosition - 1, key.text)
+                            }.toString()
+                        }
+                    } else {
+                        // example: 2*|4
+                        //             ^ <-- cursorPosition
+                        if (listOf(Key.TIMES, Key.DIVIDE).map { it.text }.contains(expression.getOrNull(cursorPosition - 1).toString()) && key == Key.MINUS) {
+                            // -> 2*-4
+                            expression = StringBuilder(expression).insert(cursorPosition, key.text).toString()
+                            cursorPosition += key.text.length
+                        } else {
+                            // -> 2+4
+                            expression = StringBuilder(expression).apply {
+                                deleteAt(cursorPosition - 1)
+                                insert(cursorPosition - 1, key.text)
+                            }.toString()
+                        }
+                    }
+                } else if (operatorKeyStrings.contains(expression.getOrNull(cursorPosition).toString())) {
+                    // example: 2|*4
+                    //            ^ <-- cursorPosition
+                    // -> 2+|4
+                    expression = StringBuilder(expression).apply {
+                        deleteAt(cursorPosition)
+                        insert(cursorPosition, key.text)
+                    }.toString()
+                    cursorPosition += 1
+                } else {
+                    expression = StringBuilder(expression).insert(cursorPosition, key.text).toString()
+                    cursorPosition += key.text.length
+                }
             }
             Key.OPEN_PARENTHESIS, Key.CLOSE_PARENTHESIS -> {
                 expression = StringBuilder(expression).insert(cursorPosition, key.text).toString()
