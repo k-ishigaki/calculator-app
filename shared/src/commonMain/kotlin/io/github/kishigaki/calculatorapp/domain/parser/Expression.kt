@@ -12,20 +12,12 @@ class Expression : Parser<Expression> {
 
 private class AdditionOrSubtraction : Parser<Expression> {
     override fun parse(text: String) =
-        PrioritizedChoice(
-            Sequence( MultiplicationOrDivision(), Symbol("+"), AdditionOrSubtraction() ) { Addition(it[0], it[2]) },
-            Sequence( MultiplicationOrDivision(), Symbol("-"), AdditionOrSubtraction() ) { Subtraction(it[0], it[2]) },
-            MultiplicationOrDivision()
-        ).parse(text)
+        BinaryOperations(MultiplicationOrDivision(), Symbol("+") to { a, b -> Addition(a, b) }, Symbol("-") to { a, b -> Subtraction(a, b) }).parse(text)
 }
 
 private class MultiplicationOrDivision : Parser<Expression> {
     override fun parse(text: String) =
-        PrioritizedChoice(
-            Sequence( ParentheticalMultiplication(), Symbol("*"), MultiplicationOrDivision() ) { Multiplication(it[0], it[2]) },
-            Sequence( ParentheticalMultiplication(), Symbol("/"), MultiplicationOrDivision() ) { Division(it[0], it[2]) },
-            ParentheticalMultiplication()
-        ).parse(text)
+        BinaryOperations(ParentheticalMultiplication(), Symbol("*") to { a, b -> Multiplication(a, b) }, Symbol("/") to { a, b -> Division(a, b) }).parse(text)
 }
 
 private class ParentheticalMultiplication : Parser<Expression> {
@@ -41,7 +33,7 @@ private class ParentheticalMultiplication : Parser<Expression> {
 private class Primary : Parser<Expression> {
     override fun parse(text: String) =
         PrioritizedChoice(
-            Number(),
+            NumberValue(),
             Sequence( Symbol("("), Expression(), Symbol(")") ) { it[1] }
         ).parse(text)
 }
